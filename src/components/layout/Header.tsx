@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Home, Moon, Sun } from "lucide-react";
+import { Home, MessageCirclePlus, Moon, Search, Settings, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 
@@ -91,6 +91,28 @@ export function Header() {
 
       {/* Right: Theme toggle button */}
       <div className="flex items-center gap-2">
+
+           {
+            pathname !== '/' ?<> <Link href="/search" className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <Search size={16}/>
+          </Link>
+
+          <Link href="/settings" className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <Settings size={16}/>
+          </Link>
+          <Link href="/chat" className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <MessageCirclePlus size={16}/>
+          </Link></> : (
+            
+            <Link href="/chat" className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <MessageCirclePlus size={16}/></Link>
+            
+            )
+           }
+            
+
+
+        <Separator orientation="vertical" className="h-6 mx-2" />
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
