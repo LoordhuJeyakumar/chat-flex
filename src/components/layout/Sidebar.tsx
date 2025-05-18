@@ -1,80 +1,144 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { MessageSquarePlus, Menu, X, ChevronRight, ChevronDown } from "lucide-react";
+import { MessageSquarePlus, PlusCircle, Search, Clock, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { cn, getMessagePreview } from "@/lib/utils";
 import initialData from "@/data/mockData";
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarContent, SidebarHeader, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const { open, isMobile } = useSidebar();
   const pathname = usePathname();
   const router = useRouter();
-
-
 
   const createNewConversation = () => {
     router.push("/conversation/new");
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      {/* Mobile Toggle Button */}
-      <SheetTrigger asChild>
-        <Button variant="outline" className="fixed bottom-6 right-6 z-40 md:hidden rounded-full p-3 shadow-xl">
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </Button>
-      </SheetTrigger>
+    <div data-state={open ? "expanded" : "collapsed"} className="h-full">
+      <SidebarContent>
+        <SidebarHeader className="p-4 flex items-center justify-between">
+          <div className={cn("space-y-1", !open && isMobile && "hidden")}>
+            <h2 className="text-lg font-semibold">Conversations</h2>
+            <p className="text-sm text-muted-foreground">Manage your chats</p>
+          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="default" 
+                size={open ? "default" : "icon"} 
+                className="transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white" 
+                onClick={createNewConversation}
+              >
+                {open ? (
+                  <>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    New Chat
+                  </>
+                ) : (
+                  <PlusCircle className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" align="center" className={cn(open && "hidden")}>
+              New Chat
+            </TooltipContent>
+          </Tooltip>
+        </SidebarHeader>
 
-      {/* Sidebar */}
-      <SheetContent className="w-80 bg-background p-0">
-        <Card className="h-full">
-          <CardHeader className="flex items-center justify-between p-4 border-b">
-            <CardTitle className="text-xl font-semibold">Conversations</CardTitle>
-            <Button variant="ghost" size="icon" onClick={createNewConversation} aria-label="New conversation">
-              <MessageSquarePlus className="w-5 h-5" />
-            </Button>
-          </CardHeader>
-          <ScrollArea className="flex-1 p-4">
-            <Accordion type="single" collapsible>
+        <div className="px-3 mb-2">
+          <Button 
+            variant="outline"
+            className="w-full justify-start text-muted-foreground"
+          >
+            <Search className="mr-2 h-4 w-4" />
+            {open && "Search chats..."}
+          </Button>
+        </div>
+
+        <ScrollArea className="flex-1 overflow-hidden">
+          <SidebarMenu>
+            <Accordion 
+              type="multiple" 
+              className="space-y-1"
+              defaultValue={[pathname.split('/')[2] || '']}
+            >
               {initialData.map((conversation) => {
                 const isActive = pathname === `/conversation/${conversation.id}`;
-                const lastMessage = conversation.messages[conversation.messages.length - 1];
                 return (
-                  <AccordionItem key={conversation.id} value={conversation.id}>
-                    <AccordionTrigger className={cn(
-                      "flex items-center justify-between p-3 rounded-lg transition-colors",
-                      isActive ? "bg-muted text-primary" : "hover:bg-muted/60"
-                    )}>
-                      <span className="font-medium truncate">{conversation.title}</span>
-                      {isActive ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {lastMessage && (
-                        <div className="text-sm text-muted-foreground truncate p-2">
-                          {getMessagePreview(lastMessage.content)}
+                  <AccordionItem 
+                    key={conversation.id} 
+                    value={conversation.id}
+                    className="border-none"
+                  >
+                    <SidebarMenuItem>
+                      <AccordionTrigger className={cn(
+                        "flex items-center justify-between py-2 px-3 rounded-md transition-colors",
+                        isActive ? "bg-muted text-primary font-medium" : "hover:bg-muted/60 text-muted-foreground",
+                        !open && "justify-center p-2"
+                      )}>
+                        {open ? (
+                          <span className="font-medium truncate">{conversation.title}</span>
+                        ) : (
+                          <MessageSquarePlus className="h-5 w-5" />
+                        )}
+                      </AccordionTrigger>
+                    </SidebarMenuItem>
+                    {open && (
+                      <AccordionContent className="pt-1 pb-2">
+                        <div className="pl-4 pr-2">
+                          {conversation.messages.length > 0 && (
+                            <div className="text-xs text-muted-foreground truncate mb-2 pl-2">
+                              {getMessagePreview(conversation.messages[conversation.messages.length - 1].content)}
+                            </div>
+                          )}
+                          <Link
+                            href={`/conversation/${conversation.id}`}
+                            className={cn(
+                              "block w-full py-1.5 px-2 rounded text-sm hover:bg-muted transition-colors",
+                              isActive && "bg-muted font-medium"
+                            )}
+                          >
+                            Open Conversation
+                          </Link>
                         </div>
-                      )}
-                      <Link
-                        href={`/conversation/${conversation.id}`}
-                        className="block text-sm text-blue-600 hover:underline p-2"
-                      >
-                        Open Conversation
-                      </Link>
-                    </AccordionContent>
+                      </AccordionContent>
+                    )}
                   </AccordionItem>
                 );
               })}
             </Accordion>
-          </ScrollArea>
-        </Card>
-      </SheetContent>
-    </Sheet>
+          </SidebarMenu>
+        </ScrollArea>
+
+        <SidebarFooter className="p-4 border-t">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Recent">
+                <Link href="/recent">
+                  <Clock className="h-4 w-4 mr-2" />
+                  {open && "Recent"}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Settings">
+                <Link href="/settings">
+                  <Settings className="h-4 w-4 mr-2" />
+                  {open && "Settings"}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </SidebarContent>
+    </div>
   );
 }
