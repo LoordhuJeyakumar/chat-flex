@@ -11,9 +11,10 @@ console.log('Loading ID-specific mock API route handler');
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const { id } = params
+  // Properly await and destructure params
+  const id = context.params.id;
   console.log(`GET /${id}: Looking up conversation`);
 
   try {
