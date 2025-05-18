@@ -205,7 +205,7 @@ export default function InputBar({
   }
 
   return (
-    <div className="border-t bg-white dark:bg-gray-900 p-4">
+    <div className="border-t  p-4 fixed-bottom  ">
       {/* Smart suggestions */}
       {smartSuggestions.length > 0 && (
         <div className="mb-3 flex gap-2 overflow-x-auto pb-2">

@@ -1,24 +1,7 @@
-// import { Message } from './ChatContainer';
-// import MessageItem from './MessageItem';
-
-// interface MessageListProps {
-//   messages: Message[];
-// }
-
-// export default function MessageList({ messages }: MessageListProps) {
-//   return (
-//     <div className="space-y-6">
-//       {messages.map((message) => (
-//         <MessageItem key={message.id} message={message} />
-//       ))}
-//     </div>
-//   );
-// }
-
 'use client';
 import { Message as Msg, Content, Annotation } from '@/types/core';
 import { useState, useEffect, useRef } from 'react';
-import { Code, Image, FileText, Mic, Table, BarChart3, MessageSquare, PenLine, X } from 'lucide-react';
+import { Code, Image, FileText, Mic, Table, BarChart3, MessageSquare, PenLine, X, ChevronUp } from 'lucide-react';
 
 interface MessageListProps {
   conversationId: string;
@@ -42,7 +25,9 @@ export default function MessageList({
   const [messages, setMessages] = useState<Msg[]>([]);
   const [annotationText, setAnnotationText] = useState('');
   const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   // Load messages directly from localStorage
   useEffect(() => {
@@ -80,10 +65,37 @@ export default function MessageList({
     };
   }, [conversationId]);
 
-  // Scroll to bottom when messages change
+  // Check scroll position to show/hide the scroll-to-top button
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      // Show button when scrolled down more than 300px
+      setShowScrollToTop(container.scrollTop > 300);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll to bottom when messages change - but only for new messages
   useEffect(() => {
     if (viewMode !== 'presentation') {
-      endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // Store current scroll position and scroll height
+      const container = containerRef.current;
+      if (!container) return;
+      
+      const prevScrollHeight = container.scrollHeight;
+      
+      // Wait for DOM to update with new messages
+      setTimeout(() => {
+        // If we were at the bottom before new messages, scroll to bottom
+        const isAtBottom = container.scrollTop + container.clientHeight >= prevScrollHeight - 50;
+        if (isAtBottom || messages.length <= 1) {
+          endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   }, [messages, viewMode]);
 
@@ -102,8 +114,30 @@ export default function MessageList({
     setAnnotationText('');
   };
 
+  // Scroll to top function
+  const scrollToTop = () => {
+    containerRef.current?.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
-    <div className={`flex-1 overflow-auto p-4 ${viewMode === 'presentation' ? 'bg-white dark:bg-black' : 'bg-gray-50 dark:bg-gray-900'}`}>
+    <div 
+      ref={containerRef}
+      className={`flex-1 overflow-auto p-4 bg-background ${viewMode === 'presentation' ? 'max-w-3xl mx-auto' : ''} relative`}
+    >
+      {/* Scroll to top button */}
+      {showScrollToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-24 right-6 bg-primary text-primary-foreground p-2 rounded-full shadow-lg hover:bg-primary/90 transition-all z-20"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp className="h-5 w-5" />
+        </button>
+      )}
+      
       {/* Annotation mode overlay */}
       {isAnnotating && (
         <div className="sticky top-0 z-10 bg-blue-50 dark:bg-blue-900/30 mb-4 p-3 rounded-lg flex items-center justify-between">
@@ -142,7 +176,7 @@ export default function MessageList({
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-500 py-12">
-            <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-4">
               <MessageSquare size={24} className="text-blue-600 dark:text-blue-400" />
             </div>
             <h3 className="text-xl font-medium mb-2 dark:text-gray-300">Start a new conversation</h3>

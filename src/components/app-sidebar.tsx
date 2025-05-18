@@ -128,7 +128,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="overflow-hidden *:data-[sidebar=sidebar]:flex-row"
       {...props}
     >
-      <div className="flex flex-row h-full w-[calc(var(--sidebar-width-icon)+1px)]">
+      <div className="flex flex-row h-full w-full">
         {/* Icon sidebar */}
         <Sidebar
           collapsible="none"
