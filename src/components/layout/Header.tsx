@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Moon, Sun, Menu } from "lucide-react";
+import { Home, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 
@@ -11,10 +11,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import Link from "next/link";
+
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -44,42 +44,56 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-background px-4 py-2 shadow-md">
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-white dark:bg-gray-900 px-4 py-3 shadow-md w-full transition-all duration-300">
       {/* Left: Sidebar trigger and Breadcrumb */}
       <div className="flex items-center gap-2">
-        <SidebarTrigger className="-ml-1 p-2 hover:bg-muted rounded-md focus:outline-none focus:ring-2 focus:ring-ring">
-          <Menu size={20} />
-        </SidebarTrigger>
+       
         <Separator orientation="vertical" className="h-6 mx-2" />
-        <Breadcrumb className="text-sm text-muted-foreground">
+        <Breadcrumb className="text-sm text-muted-foreground hidden sm:flex">
           <BreadcrumbList>
-            {breadcrumbItems.map((item, index) => (
-              <BreadcrumbItem key={item.href}>
-                <BreadcrumbLink
-                  href={item.href}
-                  className="hover:text-primary transition-colors"
-                >
-                  {item.label}
+          <Link href='/'><Home size={16}/></Link> / 
+            {breadcrumbItems.length > 0 ? (
+              breadcrumbItems.map((item, index) => (
+                <BreadcrumbItem key={item.href}>
+                  <BreadcrumbLink
+                    href={item.href}
+                    className="hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </BreadcrumbLink>
+                  {index < breadcrumbItems.length - 1 && (
+                    <BreadcrumbSeparator />
+                  )}
+                </BreadcrumbItem>
+              ))
+            ) : (
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/" className="hover:text-primary transition-colors">
+                  Home
                 </BreadcrumbLink>
-                {index < breadcrumbItems.length - 1 && (
-                  <BreadcrumbSeparator />
-                )}
               </BreadcrumbItem>
-            ))}
+            )}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
       {/* Center: Title */}
-      <h1 className="text-lg font-semibold tracking-wide select-none">
-        Chat Flex
-      </h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-extrabold tracking-tight select-none bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-indigo-600 dark:from-blue-400 dark:via-purple-300 dark:to-indigo-400 transition-colors hover:scale-105 transform duration-200">
+          Chat<span className="text-primary font-black">Flex</span>
+        </h1>
+        <div className="flex h-6 items-center">
+          <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-400/30">
+            Beta
+          </span>
+        </div>
+      </div>
 
       {/* Right: Theme toggle button */}
       <div className="flex items-center gap-2">
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="p-2 rounded-md transition-transform transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Toggle theme"
         >
           <div className="relative w-6 h-6">
