@@ -1,10 +1,11 @@
 'use client'
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Conversation } from '@/types/core';
 import MessageList from '@/components/chat/MessageList';
 import InputBar from '@/components/input/InputBar';
 import { useConversationStore } from '@/store/conversationStore';
+import Link from 'next/link';
 
 // Storage key constant
 const STORAGE_KEY = 'chat-flex-conversations';
@@ -16,8 +17,10 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Get setMessages function from the store
-  const setMessages = useConversationStore(state => state.setMessages);
+  // Get setMessages function from the store with memoization
+  const setMessages = useConversationStore(
+    useCallback(state => state.setMessages, [])
+  );
 
   useEffect(() => {
     if (!id) {
@@ -28,6 +31,9 @@ export default function ConversationPage() {
     let isMounted = true;
 
     const loadConversationData = async () => {
+      // Only load if still loading and component is mounted
+      if (!loading || !isMounted) return;
+
       try {
         // First try to load from localStorage
         if (typeof window !== 'undefined') {
@@ -103,7 +109,10 @@ export default function ConversationPage() {
     return () => {
       isMounted = false;
     };
-  }, [id, setMessages]);
+  }, [id, loading, setMessages]);
+
+  // To prevent re-renders, memoize the conversation ID
+  const memoizedId = useCallback(() => id, [id]);
 
   if (loading) {
     return (
@@ -138,16 +147,19 @@ export default function ConversationPage() {
       <div className="flex flex-1 items-center justify-center p-4">
         <div className="text-center">
           <p>Conversation not found</p>
-          <a
+          <Link
             href="/"
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 inline-block"
           >
             Return to home
-          </a>
+          </Link>
         </div>
       </div>
     );
   }
+
+  // Get current ID from memoized function to avoid re-renders
+  const currentId = memoizedId();
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
@@ -157,8 +169,8 @@ export default function ConversationPage() {
       </div>
       
       <div className="flex-1 flex flex-col bg-gray-100 rounded-lg overflow-hidden">
-        <MessageList conversationId={id} />
-        <InputBar conversationId={id} />
+        <MessageList conversationId={currentId} />
+        <InputBar conversationId={currentId} />
       </div>
     </div>
   );
