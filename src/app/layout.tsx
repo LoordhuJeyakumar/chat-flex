@@ -2,7 +2,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-
+import { Header } from "@/components/layout/Header";
 
 
 const fontSans = FontSans({
@@ -11,7 +11,7 @@ const fontSans = FontSans({
 });
 
 export const metadata = {
-  title: "Adaptive Multi-Modal Chat Interface",
+  title: "Chat Flex | Adaptive Multi-Modal Chat Interface",
   description: "An advanced chat interface with multi-modal content support",
 };
 
@@ -34,15 +34,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          
       
-          <div className="relative flex min-h-screen flex-col">
-            {children}
-          </div>
-          
-        </ThemeProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1 w-full">
+                {children}
+              </main>
+            </div>
         
-     
+        </ThemeProvider>
       </body>
     </html>
   );
