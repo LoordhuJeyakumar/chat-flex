@@ -10,16 +10,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import Link from "next/link";
 import { cn, getMessagePreview } from "@/lib/utils";
-import { mockConversations } from "@/data/mockData";
+import initialData from "@/data/mockData";
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+
 
   const createNewConversation = () => {
     router.push("/conversation/new");
@@ -45,7 +43,7 @@ export function Sidebar() {
           </CardHeader>
           <ScrollArea className="flex-1 p-4">
             <Accordion type="single" collapsible>
-              {mockConversations.map((conversation) => {
+              {initialData.map((conversation) => {
                 const isActive = pathname === `/conversation/${conversation.id}`;
                 const lastMessage = conversation.messages[conversation.messages.length - 1];
                 return (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Sender = 'user' | 'ai';
 
 export type ContentType = 'text' | 'code' | 'image' | 'audio' | 'document' | 'spreadsheet' | 'chart';

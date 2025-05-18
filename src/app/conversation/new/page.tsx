@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useRouter } from "next/navigation";
 import { useConversationStore } from '@/store/conversationStore';
@@ -8,6 +9,8 @@ import { Loader2, AlertCircle, ArrowRight } from "lucide-react";
 export default function NewConversationPage() {
   const { createConversation } = useConversationActions();
   const conversations = useConversationStore(s => s.conversations);
+  console.log('[NEW_PAGE] Loaded conversations:', conversations);
+  
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,10 +74,13 @@ export default function NewConversationPage() {
             }, 800);
           }
         }
-      } catch (err: any) {
+      } catch (err) {
         if (isMounted) {
           console.error('[NEW_PAGE] Uncaught error:', err);
-          setError(err.message || "An unexpected error occurred");
+          if(err instanceof Error) {
+
+            setError(err.message || "An unexpected error occurred");
+          }
           
           // Retry automatically on unexpected errors as well
           if (retryAttempts < maxRetries) {

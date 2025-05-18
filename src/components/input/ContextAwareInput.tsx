@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Code, FileText, Image, Mic, Table, BarChart3 } from 'lucide-react';
+import { Code, FileText,  Mic, Table, BarChart3, ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ContextAwareInput({
   type,
@@ -31,7 +32,7 @@ export default function ContextAwareInput({
   const renderTypeIcon = () => {
     switch (type) {
       case 'code': return <Code size={16} className="text-blue-600" />;
-      case 'image': return <Image size={16} className="text-emerald-600" />;
+      case 'image': return <ImageIcon size={16} className="text-emerald-600" />;
       case 'audio': return <Mic size={16} className="text-yellow-600" />;
       case 'document': return <FileText size={16} className="text-orange-600" />;
       case 'spreadsheet': return <Table size={16} className="text-green-600" />;
@@ -108,7 +109,7 @@ export default function ContextAwareInput({
         {type === 'image' && value && value.startsWith('http') && (
           <div className="mt-2 p-2 bg-gray-100 rounded">
             <p className="text-xs text-gray-500 mb-1">Preview:</p>
-            <img 
+            <Image 
               src={value} 
               alt="Preview" 
               className="max-h-[100px] rounded border border-gray-200" 

@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { MessageContent } from './ChatContainer';
-import { SendIcon, Image, Code, FileText, Mic, Table, BarChart3, Plus } from 'lucide-react';
+
+import { SendIcon,  Code, FileText, Mic, Table, BarChart3, Plus, ImageDown } from 'lucide-react';
+import { Content } from '@/types/core';
 
 interface InputAreaProps {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
-  inputType: MessageContent['type'];
-  setInputType: (type: MessageContent['type']) => void;
+  inputType: Content['type'];
+  setInputType: (type: Content['type']) => void;
 }
 
 export default function InputArea({ 
@@ -26,20 +27,23 @@ export default function InputArea({
     }
   };
   
-  const inputTypeIcons = {
+  const inputTypeIcons: Record<Content['type'], React.ReactNode> = {
     text: null,
     code: <Code size={18} />,
-    image: <Image size={18} />,
+    image: <ImageDown size={18} />,
     audio: <Mic size={18} />,
     document: <FileText size={18} />,
     spreadsheet: <Table size={18} />,
-    chart: <BarChart3 size={18} />
+    chart: <BarChart3 size={18} />,
+    drawing : <BarChart3 size={18} />,
+    diagram : <BarChart3 size={18} />,
+
   };
   
   const inputTypesOptions = [
     { type: 'text', label: 'Text', icon: null },
     { type: 'code', label: 'Code', icon: <Code size={18} /> },
-    { type: 'image', label: 'Image', icon: <Image size={18} /> },
+    { type: 'image', label: 'Image', icon: <ImageDown size={18} /> },
     { type: 'audio', label: 'Audio', icon: <Mic size={18} /> },
     { type: 'document', label: 'Document', icon: <FileText size={18} /> },
     { type: 'spreadsheet', label: 'Spreadsheet', icon: <Table size={18} /> },
@@ -75,7 +79,7 @@ export default function InputArea({
                   ${inputType === option.type ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}
                 `}
                 onClick={() => {
-                  setInputType(option.type as MessageContent['type']);
+                  setInputType(option.type as Content['type']);
                   setIsExpanded(false);
                 }}
               >

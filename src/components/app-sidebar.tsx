@@ -19,9 +19,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useConversations } from "@/hooks/useConversations"
-import { useConversationActions } from "@/hooks/useConversationActions"
+//import { useConversationActions } from "@/hooks/useConversationActions"
 import { usePathname } from "next/navigation"
 import { getRelativeTime } from "@/lib/utils"
+import { Conversation } from "@/types/core"
+import Link from "next/link"
 
 // This is sample data
 const data = {
@@ -59,7 +61,7 @@ const data = {
 }
 
 // Debug helper function
-function debugConversations(conversations: any[], source: string) {
+function debugConversations(conversations: Conversation[], source: string) {
   console.log(`[SIDEBAR] ${source}: Conversations count=${conversations?.length || 0}`);
   if (conversations?.length > 0) {
     console.log(`[SIDEBAR] Available IDs: ${conversations.map(c => c.id).join(', ')}`);
@@ -73,6 +75,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeItem, setActiveItem] = React.useState(data.navMain[0])
   const router = useRouter()
   const pathname = usePathname()
+  console.log(`[SIDEBAR] Pathname: ${pathname}`);
+  
 
   // Debug logs when conversations change
   React.useEffect(() => {
@@ -104,7 +108,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [conversations, search])
 
   // Handle sidebar item click
-  const handleSidebarItemClick = React.useCallback((item) => {
+  const handleSidebarItemClick = React.useCallback((item: typeof data.navMain[0]) => {
     console.log(`[SIDEBAR] Clicked sidebar item: ${item.title}`);
     setActiveItem(item)
     setOpen(true)
@@ -138,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                  <a href="/">
+                  <Link href="/">
                     <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                       CF
                     </div>
@@ -146,7 +150,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <span className="truncate font-medium">Chat Flex</span>
                       <span className="truncate text-xs">CF</span>
                     </div>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -190,12 +194,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {activeItem?.title}
               </div>
               {activeItem?.title === "New Chat" && (
-                <a 
+                <Link 
                   href="/conversation/new"
                   className="bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-accent-foreground rounded-md px-2.5 py-1.5 text-xs font-medium"
                 >
                   New
-                </a>
+                </Link>
               )}
             </div>
             <SidebarInput 

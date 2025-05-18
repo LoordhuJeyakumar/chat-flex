@@ -8,7 +8,7 @@ import ToolUsage from './ToolUsage';
 import { useConversationActions } from '@/hooks/useConversationActions';
 import { useRouter } from 'next/navigation';
 import { useConversationStore } from '@/store/conversationStore';
-import { Conversation, Message, Annotation } from '@/types/core';
+import { Conversation,  Annotation } from '@/types/core';
 import { MessageSquare, PenLine, ExternalLink, ClipboardCheck, Share2, Download, Trash2, RotateCw } from 'lucide-react';
 
 // Use same key as other hooks
@@ -89,6 +89,7 @@ export default function ChatContainer({ conversationId }: { conversationId?: str
     if (!conversationId && !isCreating) {
       handleCreateConversation();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId, isCreating]);
   
   // Handle creating a new conversation
@@ -153,6 +154,7 @@ export default function ChatContainer({ conversationId }: { conversationId?: str
       }
       return 'Untitled Conversation';
     } catch (err) {
+      console.error('Error getting conversation title:', err);
       return 'Chat';
     }
   };

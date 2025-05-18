@@ -1,5 +1,5 @@
-import { Table } from '@shadcn/ui'; // or use plain table
-export function SpreadsheetContent({ data }: { data: any[][] }) {
+
+export function SpreadsheetContent({ data }: { data: string[][] }) {
   return (
     <div className="overflow-auto">
       <table className="table-auto border-collapse w-full">

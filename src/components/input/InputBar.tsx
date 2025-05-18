@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useState, useEffect } from 'react';
-import { Send, Paperclip, X, Code, Image, Mic, FileText, Table, BarChart3 } from 'lucide-react';
+import { Send, Paperclip, X, Code,  Mic, FileText, Table, BarChart3, ImageIcon } from 'lucide-react';
 import ContextAwareInput from './ContextAwareInput';
-import { Message, TextContent, Content, Conversation } from '@/types/core';
+import { Message, TextContent, Content, Conversation, CodeContent } from '@/types/core';
 
 export default function InputBar({ 
   conversationId,
-  viewMode = 'standard'
+
 }: { 
   conversationId: string;
   viewMode?: 'standard' | 'focused' | 'presentation';
@@ -21,7 +22,7 @@ export default function InputBar({
   const contentTypes = [
     { id: 'text', label: 'Text', icon: <span className="text-gray-600">Aa</span> },
     { id: 'code', label: 'Code', icon: <Code size={16} className="text-blue-600" /> },
-    { id: 'image', label: 'Image', icon: <Image size={16} className="text-emerald-600" /> },
+    { id: 'image', label: 'Image', icon: <ImageIcon size={16} className="text-emerald-600" /> },
     { id: 'audio', label: 'Audio', icon: <Mic size={16} className="text-yellow-600" /> },
     { id: 'document', label: 'Document', icon: <FileText size={16} className="text-orange-600" /> },
     { id: 'spreadsheet', label: 'Spreadsheet', icon: <Table size={16} className="text-green-600" /> },
@@ -89,7 +90,7 @@ export default function InputBar({
     try {
       // Create the user message
       const processedContent: Content = {
-        type: content.type as any,
+        type: content.type as Content['type'],
         data: content.content
       } as TextContent;
       
@@ -128,7 +129,7 @@ export default function InputBar({
           type: "code",
           language: "javascript",
           data: `// Here's an example implementation\nfunction example() {\n  console.log("This is a code response");\n}\n\nexample();`
-        } as any;
+        } as CodeContent;
         break;
         
       case 'image':
@@ -201,7 +202,7 @@ export default function InputBar({
   
   function handleTypeChange(newType: string) {
     // Cast to our expected type
-    setType(newType as any);
+    setType(newType as 'text' | 'image' | 'audio' | 'code' | 'document' | 'spreadsheet' | 'chart');
   }
 
   return (

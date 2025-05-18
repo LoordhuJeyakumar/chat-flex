@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ZoomIn, ZoomOut, Maximize, Minimize, Move } from 'lucide-react';
 import { ImageContent } from '@/types/core';
+import Image from 'next/image';
 
 interface ImageViewerProps {
   content: ImageContent;
@@ -122,7 +123,7 @@ export default function ImageViewer({ content, onAnnotate }: ImageViewerProps) {
           onMouseUp={handleMouseUp}
           className="select-none"
         >
-          <img
+          <Image
             ref={imageRef}
             src={content.data}
             alt={content.caption || "Image"}

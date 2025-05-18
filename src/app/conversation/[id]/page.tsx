@@ -45,8 +45,7 @@ export default function ConversationPage() {
         id: conversationId,
         title: 'Recovered Conversation',
         description: 'This conversation was automatically recovered',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+       
         messages: []
       };
       
@@ -94,8 +93,11 @@ export default function ConversationPage() {
       } else if (result.id) {
         router.replace(`/conversation/${result.id}`);
       }
-    } catch (err: any) {
-      setError(err.message || "Couldn't create a new conversation");
+    } catch (err) {
+      if( err instanceof Error ) {
+
+        setError(err.message || "Couldn't create a new conversation");
+      }
       setLoading(false);
     }
   };
@@ -276,7 +278,7 @@ export default function ConversationPage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Recovery failed</h3>
                   <p className="text-gray-500 dark:text-gray-400 mb-6">
-                    We couldn't recover your conversation. Please try another option.
+                    We couldn&apos;t recover your conversation. Please try another option.
                   </p>
                   <div className="flex flex-col gap-3 w-full">
                     <Link
@@ -345,7 +347,7 @@ export default function ConversationPage() {
           </div>
           <h3 className="text-xl font-semibold mb-2">Conversation not available</h3>
           <p className="text-gray-500 dark:text-gray-400 mb-6">
-            We couldn't find the conversation you're looking for. It may have been deleted or doesn't exist.
+            We couldn&apos;t find the conversation you&apos;re looking for. It may have been deleted or doesn&apos;t exist.
           </p>
           <div className="flex flex-col gap-3">
             <Link

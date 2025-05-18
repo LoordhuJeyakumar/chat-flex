@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ZoomIn, ZoomOut, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface ImageRendererProps {
   src: string;
@@ -31,7 +32,7 @@ export default function ImageRenderer({ src, caption }: ImageRendererProps) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={toggleFullScreen}>
         <div className="relative" onClick={e => e.stopPropagation()}>
-          <img 
+          <Image 
             src={src} 
             alt={caption || "Image"} 
             className="max-w-full max-h-[90vh] object-contain"
@@ -65,7 +66,7 @@ export default function ImageRenderer({ src, caption }: ImageRendererProps) {
   
   return (
     <div className="max-w-full overflow-hidden">
-      <img 
+      <Image 
         src={src} 
         alt={caption || "Image"} 
         className="w-full h-auto rounded cursor-pointer hover:opacity-90 transition-opacity"

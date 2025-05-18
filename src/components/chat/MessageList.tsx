@@ -1,7 +1,8 @@
 'use client';
-import { Message as Msg, Content, Annotation } from '@/types/core';
+import { Message as Msg, Content, Annotation, Conversation, ImageContent, AudioContent, DocumentContent, SpreadsheetContent, ChartContent } from '@/types/core';
 import { useState, useEffect, useRef } from 'react';
-import { Code, Image, FileText, Mic, Table, BarChart3, MessageSquare, PenLine, X, ChevronUp } from 'lucide-react';
+import { Code,  FileText, Mic, Table, BarChart3, MessageSquare, PenLine, X, ChevronUp } from 'lucide-react';
+import Image from 'next/image';
 
 interface MessageListProps {
   conversationId: string;
@@ -39,7 +40,7 @@ export default function MessageList({
         const savedData = localStorage.getItem(STORAGE_KEY);
         if (savedData) {
           const conversations = JSON.parse(savedData);
-          const conversation = conversations.find((c: any) => c.id === conversationId);
+          const conversation = conversations.find((c: Conversation) => c.id === conversationId);
           
           if (conversation && conversation.messages) {
             setMessages(conversation.messages);
@@ -235,7 +236,6 @@ interface MessageProps {
 function Message({ 
   message, 
   isSelected = false,
-  isHovered = false,
   isAnnotating = false,
   annotations = [],
   viewMode = 'standard',
@@ -314,7 +314,7 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
         <div className="mt-2 rounded-md overflow-hidden">
           <div className="bg-gray-800 dark:bg-black text-white text-xs px-4 py-1 flex items-center">
             <Code size={14} className="mr-2" />
-            <span>{(content as any).language || 'Code'}</span>
+            <span>{(content as Content)?.type || 'Code'}</span>
           </div>
           <pre className={`bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 overflow-x-auto ${
             viewMode === 'presentation' ? 'text-base' : 'text-sm'
@@ -327,15 +327,15 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
     case 'image':
       return (
         <div className="mt-2">
-          <img 
+          <Image 
             src={content.data as string} 
-            alt={(content as any).caption || 'Image'} 
+            alt={(content as ImageContent).caption || 'Image'} 
             className={`rounded-md shadow-sm ${
               viewMode === 'presentation' ? 'max-h-96 mx-auto' : 'max-w-full'
             }`}
           />
-          {(content as any).caption && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{(content as any).caption}</p>
+          {(content as ImageContent).caption && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{(content as ImageContent).caption}</p>
           )}
         </div>
       );
@@ -345,10 +345,10 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
         <div className="mt-2 flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
           <Mic size={18} className="text-blue-600 dark:text-blue-400" />
           <audio controls src={content.data as string} className="w-full" />
-          {(content as any).transcription && (
+          {(content as AudioContent).transcription && (
             <details className="text-sm mt-1 text-gray-700 dark:text-gray-300">
               <summary className="cursor-pointer">Transcription</summary>
-              <p className="mt-1 p-2 bg-white dark:bg-gray-900 rounded">{(content as any).transcription}</p>
+              <p className="mt-1 p-2 bg-white dark:bg-gray-900 rounded">{(content as AudioContent).transcription}</p>
             </details>
           )}
         </div>
@@ -365,8 +365,8 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
           >
             <FileText size={18} className="text-blue-600 dark:text-blue-400" />
             <div>
-              <div className="font-medium dark:text-gray-200">{(content as any).filename || 'Document'}</div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">{(content as any).fileType || 'File'}</div>
+              <div className="font-medium dark:text-gray-200">{(content as DocumentContent).filename || 'Document'}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">{(content as DocumentContent).fileType || 'File'}</div>
             </div>
           </a>
         </div>
@@ -383,7 +383,7 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
             <table className="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm">
               <thead className="bg-gray-100 dark:bg-gray-900">
                 <tr>
-                  {(content as any).metadata?.columns?.map((col: string, i: number) => (
+                  {(content as SpreadsheetContent).metadata?.columns?.map((col: string, i: number) => (
                     <th key={i} className="py-2 px-3 border-b text-left font-medium dark:text-gray-200">{col}</th>
                   )) || <th className="py-2 px-3 dark:text-gray-200">Data</th>}
                 </tr>
@@ -407,7 +407,7 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
         <div className="mt-2">
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 size={18} className="text-purple-600 dark:text-purple-400" />
-            <span className="font-medium dark:text-gray-200">Chart ({(content as any).chartType || 'Unknown type'})</span>
+            <span className="font-medium dark:text-gray-200">Chart ({(content as ChartContent).chartType || 'Unknown type'})</span>
           </div>
           <div className={`bg-gray-100 dark:bg-gray-800 p-4 rounded-md text-center ${
             viewMode === 'presentation' ? 'h-80' : 'h-40'
