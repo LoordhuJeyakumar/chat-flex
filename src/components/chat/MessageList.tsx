@@ -17,15 +17,29 @@
 
 'use client';
 import { Message as Msg } from '@/types/core';
-import { useChat } from '@/hooks/useChat';
+import { useConversationStore } from '@/store/conversationStore';
+import { useCallback } from 'react';
+
+// Define the store state type for proper typing
+type StoreState = {
+  messages: Record<string, Msg[]>;
+  // other state properties would go here as needed
+};
 
 export default function MessageList({ conversationId }: { conversationId: string }) {
-  const { messages } = useChat(conversationId);
+  // Create a stable selector with useCallback and proper typing
+  const messagesSelector = useCallback(
+    (state: StoreState) => state.messages[conversationId] || [],
+    [conversationId]
+  );
+  
+  // Use the stable selector
+  const messages = useConversationStore(messagesSelector);
   
   return (
     <div className="flex-1 overflow-auto p-4 space-y-4">
-      {messages?.length > 0 ? (
-        messages.map(m => (
+      {messages.length > 0 ? (
+        messages.map((m: Msg) => (
           <Message key={m.id} message={m} />
         ))
       ) : (
@@ -37,7 +51,7 @@ export default function MessageList({ conversationId }: { conversationId: string
   );
 }
 
-// Simple Message component (assume this was imported before)
+// Simple Message component
 function Message({ message }: { message: Msg }) {
   // Ensure content.data is rendered as a string
   const messageContent = typeof message.content.data === 'string' 
