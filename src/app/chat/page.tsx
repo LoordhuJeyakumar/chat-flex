@@ -120,7 +120,11 @@ export default function ChatPage() {
     }));
   };
 
+  
+
   return (
+  
+    
     <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Mobile sidebar toggle */}
       {isSmallScreen && (
@@ -200,7 +204,7 @@ export default function ChatPage() {
           New Conversation
         </button>
       </div>
-      
+    
       {/* Main content area */}
       <div className={`flex-1 flex flex-col ${isSmallScreen && isSidebarOpen ? 'opacity-50' : ''}`}>
         {/* Conversation header */}
@@ -235,5 +239,6 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+
   );
 } 
