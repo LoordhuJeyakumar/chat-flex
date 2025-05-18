@@ -10,11 +10,11 @@ import * as db from '../../lib/db'
 console.log('Loading ID-specific mock API route handler');
 
 export async function GET(
-  _req: NextRequest,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  // Properly await and destructure params
-  const id = context.params.id;
+  // Always access params in an async environment
+  const id = params.id;
   console.log(`GET /${id}: Looking up conversation`);
 
   try {
