@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Message } from './ChatContainer';
+
 import TextRenderer from './renderers/TextRenderer';
 import CodeRenderer from './renderers/CodeRenderer';
 import ImageRenderer from './renderers/ImageRenderer';
@@ -7,7 +7,9 @@ import AudioRenderer from './renderers/AudioRenderer';
 import SpreadsheetRenderer from './renderers/SpreadsheetRenderer';
 import ChartRenderer from './renderers/ChartRenderer';
 import DocumentRenderer from './renderers/DocumentRenderer';
+
 import { ChevronDown, ChevronUp, Bot, User } from 'lucide-react';
+import { Message } from '@/types/core';
 
 interface MessageItemProps {
   message: Message;
@@ -26,13 +28,19 @@ export default function MessageItem({ message }: MessageItemProps) {
       case 'image':
         return <ImageRenderer src={message.content.data} caption={message.content.caption} />;
       case 'audio':
-        return <AudioRenderer src={message.content.data} />;
+        return <AudioRenderer src={message.content.data} transcription={message.content.transcription} />;
       case 'spreadsheet':
         return <SpreadsheetRenderer data={message.content.data} metadata={message.content.metadata} />;
       case 'chart':
         return <ChartRenderer chartData={message.content} />;
       case 'document':
-        return <DocumentRenderer content={message.content.data} />;
+        return <DocumentRenderer 
+                content={message.content.data} 
+                fileName={message.content.fileName} 
+                fileType={message.content.fileType} 
+                totalPages={message.content.totalPages || 1}
+                highlights={message.content.highlights}
+               />;
       default:
         return <TextRenderer content="Unsupported content type" />;
     }

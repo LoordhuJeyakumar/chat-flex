@@ -1,11 +1,18 @@
 'use client';
 import { useState } from 'react';
-import { Message, LayoutConfig } from '@/types/core';
+
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import ImageViewer from '../content/ImageViewer';
 import AudioPlayer from '../content/AudioPlayer';
 import DocumentViewer from '../content/DocumentViewer';
 import CodeEditor from '../content/CodeEditor';
+import { Message, ThinkingStep, } from '@/types/core';
+
+interface LayoutConfig {
+  width: number;
+  height: number;
+  mode: string;
+}
 
 interface ChatMessageProps {
   message: Message;
@@ -22,22 +29,22 @@ export default function ChatMessage({ message, layout }: ChatMessageProps) {
   });
   
   // Determine if message is from user or AI
-  const isUser = message.role === 'user';
+  const isUser = message.sender === 'user';
   
   // Render content based on type
   const renderContent = () => {
     // If no content type or it's text, just render the text content
-    if (!message.contentType || message.contentType === 'text') {
-      return <p className="whitespace-pre-wrap">{message.content}</p>;
+    if (!message.content.type || message.content.type === 'text') {
+      return <p className="whitespace-pre-wrap">{message.content.data}</p>;
     }
     
     // Render specialized content based on type
-    switch (message.contentType) {
+    switch (message.content.type) {
       case 'code':
         return (
           <CodeEditor
-            initialCode={message.content}
-            language={(message.metadata?.language as string) || 'javascript'}
+            initialCode={message.content.data}
+            language={(message.content.language as string) || 'javascript'}
             readOnly={true}
             showExplanation={!isUser}
           />
@@ -45,48 +52,48 @@ export default function ChatMessage({ message, layout }: ChatMessageProps) {
         
       case 'image':
         // For image content, we need proper ImageContent type
-        if (message.metadata?.url || message.metadata?.data) {
+        if (message.content.data || message.content.data) {
           return (
             <ImageViewer
               content={{
                 type: 'image',
-                data: (message.metadata?.url as string) || (message.metadata?.data as string),
-                caption: message.content || undefined
+                data: (message.content?.data as string) || (message.content?.data as string),
+                caption: message.content.caption || ''
               }}
             />
           );
         }
-        return <p>{message.content}</p>;
+        return <p>{message.content.data}</p>;
         
       case 'audio':
         // For audio content, we pass audioUrl and transcription
-        if (message.metadata?.url || message.metadata?.data) {
+        if (message.content.data) {
           return (
             <AudioPlayer
-              audioUrl={(message.metadata?.url as string) || (message.metadata?.data as string)}
-              transcription={message.content}
-              keyMoments={message.metadata?.keyMoments as Array<{time: number, label: string}>}
+              audioUrl={(message.content.data as string) || ''}
+              transcription={message.content.transcription as string}
+              
             />
           );
         }
-        return <p>{message.content}</p>;
+        return <p>{message.content.data}</p>;
         
       case 'document':
         // For document content, we show the DocumentViewer
-        if (message.metadata?.url) {
+        if (message.content.data || message.content.fileType) {
           return (
             <DocumentViewer
-              documentUrl={message.metadata.url as string}
-              documentTitle={message.metadata?.name as string}
-              totalPages={message.metadata?.pages as number || 1}
+              documentUrl={message.content.data as string}
+              documentTitle={message.content.fileName as string}
+              totalPages={message.content.totalPages as number || 1}
             />
           );
         }
-        return <p>{message.content}</p>;
+        return <p>{message.content.data}</p>;
         
       default:
         // For any other content types, just show the text content
-        return <p className="whitespace-pre-wrap">{message.content}</p>;
+        return <p className="whitespace-pre-wrap">{message.content.data as string}</p>;
     }
   };
   
@@ -109,9 +116,10 @@ export default function ChatMessage({ message, layout }: ChatMessageProps) {
         {showThinking && (
           <div className="mt-2 text-sm">
             <div className="space-y-2">
-              {message.thinking.map((step, index) => (
+              {(message.thinking as ThinkingStep[]).map((step, index) => (
                 <div key={index} className="pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-                  <p className="text-gray-600 dark:text-gray-400">{step}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{ step.step }</p>
+                  <p className="text-gray-600 dark:text-gray-400">{ step.content }</p>
                 </div>
               ))}
             </div>

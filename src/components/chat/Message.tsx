@@ -24,9 +24,9 @@ export default function Message({ message }: { message: Message }) {
       case 'audio':
         return <AudioContent url={content.data} />;
       case 'spreadsheet':
-        return <SpreadsheetContent data={content.data} />;
+        return <SpreadsheetContent data={content.data as unknown as string[][] } />;
       case 'chart':
-        return <ChartContent chart={content.data} />;
+        return <ChartContent chart={content.data as unknown as { labels: string[]; datasets: { label: string; data: number[] }[] }} />;
       case 'document':
         return <DocumentContent url={content.data} />;
       case 'diagram':

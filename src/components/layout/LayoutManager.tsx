@@ -52,7 +52,7 @@ export default function LayoutManager({
       
       // Check for consecutive media messages of the same type
       const hasConsecutiveMediaMessages = messages.length >= 2 && 
-        messages.slice(-2).every(m => m.contentType === currentContentType);
+        messages.slice(-2).every(m => m.content.type === currentContentType);
       
       // Adjust layout based on content type
       if (isMediaContent) {

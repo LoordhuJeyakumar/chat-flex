@@ -734,16 +734,16 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
             labels: ["January", "February", "March", "April"],
             datasets: [
               {
-                label: "Widget A Sales",
-                data: [4200, 4400, 4900, 5300],
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
+                label: "Widget A",
+                data: [4200, 4400, 4900, 5300].map(value => ({ x: 0, y: value, r: 0 })),
+                backgroundColor: "rgba(54, 162, 235, 0.6)"
               },
               {
-                label: "Widget B Sales",
-                data: [2100, 2300, 2500, 2700],
-                backgroundColor: "rgba(153, 102, 255, 0.6)",
-              },
-            ],
+                label: "Widget B",
+                data: [2300, 2450, 2600, 2700].map(value => ({ x: 0, y: value, r: 0 })),
+                backgroundColor: "rgba(255, 99, 132, 0.6)"
+              }
+            ]
           },
           options: {
             title: {
@@ -769,35 +769,35 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "chart",
           chartType: "line",
-          data: {
-            labels: ["January", "February", "March", "April"],
-            datasets: [
-              {
-                label: "North",
-                data: [1700, 1800, 2000, 2150],
-                borderColor: "rgba(255, 99, 132, 1)",
-                fill: false,
-              },
-              {
-                label: "South",
-                data: [1500, 1600, 1700, 1850],
-                borderColor: "rgba(54, 162, 235, 1)",
-                fill: false,
-              },
-              {
-                label: "East",
-                data: [1550, 1650, 1850, 2000],
-                borderColor: "rgba(255, 206, 86, 1)",
-                fill: false,
-              },
-              {
-                label: "West",
-                data: [1550, 1650, 1850, 2000],
-                borderColor: "rgba(75, 192, 192, 1)",
-                fill: false,
-              },
-            ],
-          },
+         data: {
+  labels: ["January", "February", "March", "April"],
+  datasets: [
+    {
+      label: "North",
+      data: [1700, 1800, 2000, 2150].map((value, index) => ({ x: index + 1, y: value, r: 5 })),
+      borderColor: "rgba(255, 99, 132, 1)",
+      fill: false
+    },
+    {
+      label: "South",
+      data: [1500, 1600, 1700, 1850].map((value, index) => ({ x: index + 1, y: value, r: 5 })),
+      borderColor: "rgba(54, 162, 235, 1)",
+      fill: false
+    },
+    {
+      label: "East",
+      data: [1550, 1650, 1850, 2000].map((value, index) => ({ x: index + 1, y: value, r: 5 })),
+      borderColor: "rgba(255, 206, 86, 1)",
+      fill: false
+    },
+    {
+      label: "West",
+      data: [1550, 1650, 1850, 2000].map((value, index) => ({ x: index + 1, y: value, r: 5 })),
+      borderColor: "rgba(75, 192, 192, 1)",
+      fill: false
+    }
+  ],
+},
           options: {
             title: {
               display: true,
@@ -1090,9 +1090,9 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "document",
           data: "Product Specification: HealthTrack Mobile App\n\nVersion: 1.0\nDate: May 15, 2025\n\n1. Product Overview\nHealthTrack is a mobile application designed to help users monitor and improve their health by tracking various metrics, providing personalized recommendations, and connecting with healthcare providers.\n\n2. Target Audience\n- Health-conscious individuals aged 25-55\n- People managing chronic conditions\n- Fitness enthusiasts\n- Healthcare providers\n\n3. Key Features\n\n3.1 Health Metrics Tracking\n- Step counting\n- Heart rate monitoring\n- Sleep tracking\n- Nutrition logging\n- Medication reminders\n\n3.2 User Dashboard\n- Daily, weekly, and monthly views\n- Progress towards goals\n- Health insights and trends\n\n3.3 Social Features\n- Connect with friends\n- Join health challenges\n- Share achievements\n\n3.4 Healthcare Provider Integration\n- Share data with doctors\n- Telemedicine appointment scheduling\n- Secure messaging with healthcare team\n\n4. Technical Requirements\n\n4.1 Platforms\n- iOS (iPhone 12 and newer)\n- Android (version 10.0 and above)\n\n4.2 Integrations\n- Apple Health\n- Google Fit\n- Major fitness trackers (Fitbit, Garmin, etc.)\n- Electronic Health Record (EHR) systems\n\n4.3 Data Security\n- HIPAA compliance\n- End-to-end encryption\n- User authentication\n\n5. User Flow\n\n5.1 Onboarding\n- Account creation\n- Health profile setup\n- Connection to devices and services\n- Initial goal setting\n\n5.2 Daily Use\n- Dashboard review\n- Metrics logging\n- Recommendation review\n\n6. Design Guidelines\n\n6.1 Visual Style\n- Clean, medical aesthetic\n- Accessible color palette\n- Clear data visualizations\n\n6.2 Accessibility\n- Support for screen readers\n- Adjustable text sizes\n- Voice commands\n\n7. Development Timeline\n\nPhase 1 (June 2025)\n- Core tracking features\n- Basic dashboard\n- User accounts and profiles\n\nPhase 2 (August 2025)\n- Social features\n- Enhanced analytics\n- Initial healthcare provider features\n\nPhase 3 (October 2025)\n- Full healthcare integration\n- Advanced recommendations\n- Premium subscription features\n\n8. Success Metrics\n\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics, subscription features\n\n8. Success Metrics\n\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics",
-          filename: "HealthTrack_Product_Spec_v1.0.txt",
+          fileName: "HealthTrack_Product_Spec_v1.0.txt",
           fileType: "text/plain",
-          pages: 1,
+          totalPages: 1,
         },
       },
       {
@@ -1124,37 +1124,9 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "document",
           data: "# Document Review: HealthTrack Mobile App Specification\n\n## Overview\nI've reviewed the HealthTrack Mobile App product specification document (version 1.0) and identified several areas that would benefit from additional clarification or detail.\n\n## Key Gaps & Recommendations\n\n### 1. Data Handling & Privacy Policy\n**Gap**: Missing details about data retention, user data deletion options, and compliance with international privacy regulations (GDPR, CCPA).\n**Recommendation**: Add a dedicated section covering data handling practices, privacy policy integration, and compliance with global regulations.\n\n### 2. Monetization Strategy\n**Gap**: No clear information about the business model (freemium, subscription, one-time purchase).\n**Recommendation**: Define the monetization approach, pricing tiers if applicable, and what features will be free vs. premium.\n\n### 3. Offline Functionality\n**Gap**: No mention of how the app functions without internet connectivity.\n**Recommendation**: Specify which features work offline and how data synchronization occurs when connectivity is restored.\n\n### 4. User Support\n**Gap**: Missing details about customer support channels, help documentation, and training resources.\n**Recommendation**: Add a section detailing the support strategy, including in-app help, knowledge base, and support contact methods.\n\n### 5. Performance Requirements\n**Gap**: No specific performance benchmarks or requirements (load times, battery usage, etc.).\n**Recommendation**: Define key performance indicators and acceptable thresholds for resource usage.\n\n### 6. Testing Strategy\n**Gap**: No information about testing methodologies, beta testing plans, or quality assurance processes.\n**Recommendation**: Outline the testing approach, including user acceptance testing, beta program details, and QA procedures.\n\n### 7. Localization\n**Gap**: No mention of language support or regional adaptations.\n**Recommendation**: Specify initial language offerings and any region-specific adaptations needed for international markets.\n\n## Additional Considerations\n\n### Feature Priorities\nConsider adding priority levels to features to guide development if timeline constraints emerge.\n\n### Competitive Analysis\nA brief overview of competitive landscape and key differentiators would strengthen the document.\n\n### User Research Validation\nMention any user research that validates the proposed features and approach.\n\n## Conclusion\nOverall, the specification provides a solid foundation but would benefit from addressing the gaps identified above. The timeline seems ambitious, particularly for healthcare integration in Phase 3, so additional detail around technical implementation would be valuable.",
-          annotations: [
-            {
-              type: "highlight",
-              position: {
-                section: "4. Technical Requirements",
-                offset: 0,
-                length: 25,
-              },
-              comment:
-                "This section needs more specific performance requirements and compatibility details.",
-            },
-            {
-              type: "highlight",
-              position: { section: "4.2 Integrations", offset: 0, length: 21 },
-              comment:
-                "Need to specify which specific EHR systems will be supported initially.",
-            },
-            {
-              type: "highlight",
-              position: {
-                section: "7. Development Timeline",
-                offset: 0,
-                length: 23,
-              },
-              comment:
-                "Timeline seems aggressive for healthcare integrations - consider more detailed phasing.",
-            },
-          ],
-          filename: "HealthTrack_Spec_Review.md",
+          fileName: "HealthTrack_Spec_Review.md",
           fileType: "text/markdown",
-          pages: 1,
+          totalPages: 1,
         },
       },
       {
@@ -1444,7 +1416,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "document",
           data: "Product Specification: HealthTrack Mobile App\n\nVersion: 1.1\nDate: May 17, 2025\n\n1. Product Overview\nHealthTrack is a mobile application designed to help users monitor and improve their health by tracking various metrics, providing personalized recommendations, and connecting with healthcare providers.\n\n2. Target Audience\n- Health-conscious individuals aged 25-55\n- People managing chronic conditions\n- Fitness enthusiasts\n- Healthcare providers\n- Family health coordinators\n\n3. Key Features\n\n3.1 Health Metrics Tracking\n- Step counting\n- Heart rate monitoring\n- Sleep tracking\n- Nutrition logging\n- Medication reminders\n- Symptom tracking\n- Custom metric creation (Premium)\n\n3.2 User Dashboard\n- Daily, weekly, and monthly views\n- Progress towards goals\n- Health insights and trends\n- Priority health alerts\n- Advanced analytics and predictions (Premium)\n\n3.3 Social Features\n- Connect with friends\n- Join health challenges\n- Share achievements\n- Family account connections (Premium)\n- Community health forums (Premium)\n\n3.4 Healthcare Provider Integration\n- Share data with doctors\n- Telemedicine appointment scheduling\n- Secure messaging with healthcare team\n- Provider dashboard for patient monitoring (Provider Subscription)\n- Integration with clinical workflows (Provider Subscription)\n\n4. Technical Requirements\n\n4.1 Platforms\n- iOS (iPhone 12 and newer)\n- Android (version 10.0 and above)\n\n4.2 Integrations\n- Apple Health\n- Google Fit\n- Major fitness trackers (Fitbit, Garmin, etc.)\n- Electronic Health Record (EHR) systems\n  - Initial support: Epic, Cerner, Allscripts\n  - Phase 2: NextGen, Meditech, eClinicalWorks\n\n4.3 Data Security\n- HIPAA compliance\n- End-to-end encryption\n- User authentication\n- SOC 2 compliance\n- GDPR and CCPA compliance\n\n4.4 Performance Requirements\n- App launch time < 2 seconds\n- Data sync background operations < 5% battery impact\n- Offline functionality for core tracking features\n- Maximum storage requirement: 100MB (excluding user data)\n\n5. User Flow\n\n5.1 Onboarding\n- Account creation\n- Health profile setup\n- Connection to devices and services\n- Initial goal setting\n- Introduction to free vs. premium features\n\n5.2 Daily Use\n- Dashboard review\n- Metrics logging\n- Recommendation review\n- Premium feature discovery\n\n5.3 Offline Experience\n- Core tracking continues\n- Data stored locally\n- Sync upon reconnection\n- Graceful notification of limited functionality\n\n6. Design Guidelines\n\n6.1 Visual Style\n- Clean, medical aesthetic\n- Accessible color palette\n- Clear data visualizations\n- Premium features subtly distinguished\n\n6.2 Accessibility\n- Support for screen readers\n- Adjustable text sizes\n- Voice commands\n- High contrast mode\n\n7. Monetization Strategy\n\n7.1 Freemium Model\n- Basic Tier (Free)\n  - Core health tracking features\n  - Basic insights and recommendations\n  - 30-day history\n  - Limited healthcare provider sharing\n  - Ad-supported experience\n\n- Premium Tier ($7.99/month or $79.99/year)\n  - Advanced analytics and insights\n  - Unlimited history and data export\n  - AI health coach and personalized recommendations\n  - Priority healthcare provider connectivity\n  - Custom health metrics and tracking\n  - Ad-free experience\n\n- Family Plan ($19.99/month or $199.99/year)\n  - Premium features for up to 6 family members\n  - Family health coordination tools\n  - Family challenges and goals\n  - Caregiver monitoring features\n\n7.2 Healthcare Provider Model\n- Provider Dashboard Subscription ($199/month per provider)\n  - Patient population monitoring\n  - Custom alert configuration\n  - Integration with EHR systems\n  - Patient communication tools\n  - Outcome tracking and reporting\n\n7.3 Data Research Partnership (Opt-in)\n- Anonymized, aggregated data insights\n- Research partnership revenue sharing\n- Absolute user privacy and transparency\n- Clear user benefits for participation\n\n8. Development Timeline\n\nPhase 1 (June 2025)\n- Core tracking features\n- Basic dashboard\n- User accounts and profiles\n- Freemium foundation\n\nPhase 2 (August 2025)\n- Social features\n- Enhanced analytics\n- Premium subscription implementation\n- Initial healthcare provider features\n- Family plan beta\n\nPhase 3 (October 2025)\n- Full healthcare integration\n- Provider subscription launch\n- Advanced recommendations\n- Complete premium feature set\n\nPhase 4 (December 2025)\n- Research partnership platform\n- Advanced AI health coaching\n- International localization\n\n9. Success Metrics\n\n9.1 User Metrics\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics\n\n9.2 Business Metrics\n- Conversion rate: 5% free to premium\n- Provider adoption: 500 healthcare providers in first 6 months\n- Annual recurring revenue: $2M by end of year 1\n\n10. Support and Operations\n\n10.1 User Support\n- In-app help center\n- Email support (24-hour response)\n- Live chat support (Premium users)\n- Community forums\n\n10.2 Updates and Maintenance\n- Bi-weekly feature updates\n- Monthly security patches\n- Quarterly major releases\n\n11. Localization\n\n- Initial launch: English (US, UK, CA, AU)\n- Phase 2: Spanish, French, German\n- Phase 3: Japanese, Chinese, Portuguese\n- Culturally appropriate health recommendations\n- Regional regulatory compliance\n\n12. Testing Strategy\n\n12.1 Internal Testing\n- Unit testing for all components\n- Integration testing for connected services\n- Performance testing for speed and battery usage\n\n12.2 External Testing\n- Closed beta with 500 users (2 weeks)\n- Open beta with 5,000 users (4 weeks)\n- Healthcare provider beta program\n- Accessibility compliance testing",
-          filename: "HealthTrack_Product_Spec_v1.1.txt",
+          fileName: "HealthTrack_Product_Spec_v1.1.txt",
           fileType: "text/plain",
           changes: [
             {
@@ -1479,7 +1451,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
               content: "New sections for Support, Localization, and Testing",
             },
           ],
-          pages: 1,
+          totalPages: 1,
         },
       },
       {
@@ -1656,7 +1628,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: "I've enhanced the image and extracted the text. Here’s the result:",
+          data: "I've enhanced the image and extracted the text. Here's the result:",
         },
       },
       {
@@ -1854,7 +1826,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: "Here’s the enhanced version of your photo!",
+          data: "Here's the enhanced version of your photo!",
         },
       },
       {
@@ -1952,7 +1924,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: `Here’s a suggested 5-day itinerary for Paris based on your interests:
+          data: `Here's a suggested 5-day itinerary for Paris based on your interests:
 
 Day 1: Arrival and Leisure
 - Check into your hotel

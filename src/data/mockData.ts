@@ -735,12 +735,22 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
             datasets: [
               {
                 label: "Widget A Sales",
-                data: [4200, 4400, 4900, 5300],
+                data: [
+                  { x: 0, y: 4200, r: 1 },
+                  { x: 1, y: 4400, r: 1 },
+                  { x: 2, y: 4900, r: 1 },
+                  { x: 3, y: 5300, r: 1 }
+                ],
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
               },
               {
                 label: "Widget B Sales",
-                data: [2100, 2300, 2500, 2700],
+                data: [
+                  { x: 0, y: 2100, r: 1 },
+                  { x: 1, y: 2300, r: 1 },
+                  { x: 2, y: 2500, r: 1 },
+                  { x: 3, y: 2700, r: 1 }
+                ],
                 backgroundColor: "rgba(153, 102, 255, 0.6)",
               },
             ],
@@ -774,25 +784,45 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
             datasets: [
               {
                 label: "North",
-                data: [1700, 1800, 2000, 2150],
+                data: [
+                  { x: 0, y: 1700, r: 1 },
+                  { x: 1, y: 1800, r: 1 },
+                  { x: 2, y: 2000, r: 1 },
+                  { x: 3, y: 2150, r: 1 }
+                ],
                 borderColor: "rgba(255, 99, 132, 1)",
                 fill: false,
               },
               {
                 label: "South",
-                data: [1500, 1600, 1700, 1850],
+                data: [
+                  { x: 0, y: 1500, r: 1 },
+                  { x: 1, y: 1600, r: 1 },
+                  { x: 2, y: 1700, r: 1 },
+                  { x: 3, y: 1850, r: 1 }
+                ],
                 borderColor: "rgba(54, 162, 235, 1)",
                 fill: false,
               },
               {
                 label: "East",
-                data: [1550, 1650, 1850, 2000],
+                data: [
+                  { x: 0, y: 1550, r: 1 },
+                  { x: 1, y: 1650, r: 1 },
+                  { x: 2, y: 1850, r: 1 },
+                  { x: 3, y: 2000, r: 1 }
+                ],
                 borderColor: "rgba(255, 206, 86, 1)",
                 fill: false,
               },
               {
                 label: "West",
-                data: [1550, 1650, 1850, 2000],
+                data: [
+                  { x: 0, y: 1550, r: 1 },
+                  { x: 1, y: 1650, r: 1 },
+                  { x: 2, y: 1850, r: 1 },
+                  { x: 3, y: 2000, r: 1 }
+                ],
                 borderColor: "rgba(75, 192, 192, 1)",
                 fill: false,
               },
@@ -1090,7 +1120,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "document",
           data: "Product Specification: HealthTrack Mobile App\n\nVersion: 1.0\nDate: May 15, 2025\n\n1. Product Overview\nHealthTrack is a mobile application designed to help users monitor and improve their health by tracking various metrics, providing personalized recommendations, and connecting with healthcare providers.\n\n2. Target Audience\n- Health-conscious individuals aged 25-55\n- People managing chronic conditions\n- Fitness enthusiasts\n- Healthcare providers\n\n3. Key Features\n\n3.1 Health Metrics Tracking\n- Step counting\n- Heart rate monitoring\n- Sleep tracking\n- Nutrition logging\n- Medication reminders\n\n3.2 User Dashboard\n- Daily, weekly, and monthly views\n- Progress towards goals\n- Health insights and trends\n\n3.3 Social Features\n- Connect with friends\n- Join health challenges\n- Share achievements\n\n3.4 Healthcare Provider Integration\n- Share data with doctors\n- Telemedicine appointment scheduling\n- Secure messaging with healthcare team\n\n4. Technical Requirements\n\n4.1 Platforms\n- iOS (iPhone 12 and newer)\n- Android (version 10.0 and above)\n\n4.2 Integrations\n- Apple Health\n- Google Fit\n- Major fitness trackers (Fitbit, Garmin, etc.)\n- Electronic Health Record (EHR) systems\n\n4.3 Data Security\n- HIPAA compliance\n- End-to-end encryption\n- User authentication\n\n5. User Flow\n\n5.1 Onboarding\n- Account creation\n- Health profile setup\n- Connection to devices and services\n- Initial goal setting\n\n5.2 Daily Use\n- Dashboard review\n- Metrics logging\n- Recommendation review\n\n6. Design Guidelines\n\n6.1 Visual Style\n- Clean, medical aesthetic\n- Accessible color palette\n- Clear data visualizations\n\n6.2 Accessibility\n- Support for screen readers\n- Adjustable text sizes\n- Voice commands\n\n7. Development Timeline\n\nPhase 1 (June 2025)\n- Core tracking features\n- Basic dashboard\n- User accounts and profiles\n\nPhase 2 (August 2025)\n- Social features\n- Enhanced analytics\n- Initial healthcare provider features\n\nPhase 3 (October 2025)\n- Full healthcare integration\n- Advanced recommendations\n- Premium subscription features\n\n8. Success Metrics\n\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics, subscription features\n\n8. Success Metrics\n\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics",
-          filename: "HealthTrack_Product_Spec_v1.0.txt",
+          fileName: "HealthTrack_Product_Spec_v1.0.txt",
           fileType: "text/plain",
           pages: 1,
         },
@@ -1152,7 +1182,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
                 "Timeline seems aggressive for healthcare integrations - consider more detailed phasing.",
             },
           ],
-          filename: "HealthTrack_Spec_Review.md",
+          fileName: "HealthTrack_Spec_Review.md",
           fileType: "text/markdown",
           pages: 1,
         },
@@ -1444,7 +1474,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         content: {
           type: "document",
           data: "Product Specification: HealthTrack Mobile App\n\nVersion: 1.1\nDate: May 17, 2025\n\n1. Product Overview\nHealthTrack is a mobile application designed to help users monitor and improve their health by tracking various metrics, providing personalized recommendations, and connecting with healthcare providers.\n\n2. Target Audience\n- Health-conscious individuals aged 25-55\n- People managing chronic conditions\n- Fitness enthusiasts\n- Healthcare providers\n- Family health coordinators\n\n3. Key Features\n\n3.1 Health Metrics Tracking\n- Step counting\n- Heart rate monitoring\n- Sleep tracking\n- Nutrition logging\n- Medication reminders\n- Symptom tracking\n- Custom metric creation (Premium)\n\n3.2 User Dashboard\n- Daily, weekly, and monthly views\n- Progress towards goals\n- Health insights and trends\n- Priority health alerts\n- Advanced analytics and predictions (Premium)\n\n3.3 Social Features\n- Connect with friends\n- Join health challenges\n- Share achievements\n- Family account connections (Premium)\n- Community health forums (Premium)\n\n3.4 Healthcare Provider Integration\n- Share data with doctors\n- Telemedicine appointment scheduling\n- Secure messaging with healthcare team\n- Provider dashboard for patient monitoring (Provider Subscription)\n- Integration with clinical workflows (Provider Subscription)\n\n4. Technical Requirements\n\n4.1 Platforms\n- iOS (iPhone 12 and newer)\n- Android (version 10.0 and above)\n\n4.2 Integrations\n- Apple Health\n- Google Fit\n- Major fitness trackers (Fitbit, Garmin, etc.)\n- Electronic Health Record (EHR) systems\n  - Initial support: Epic, Cerner, Allscripts\n  - Phase 2: NextGen, Meditech, eClinicalWorks\n\n4.3 Data Security\n- HIPAA compliance\n- End-to-end encryption\n- User authentication\n- SOC 2 compliance\n- GDPR and CCPA compliance\n\n4.4 Performance Requirements\n- App launch time < 2 seconds\n- Data sync background operations < 5% battery impact\n- Offline functionality for core tracking features\n- Maximum storage requirement: 100MB (excluding user data)\n\n5. User Flow\n\n5.1 Onboarding\n- Account creation\n- Health profile setup\n- Connection to devices and services\n- Initial goal setting\n- Introduction to free vs. premium features\n\n5.2 Daily Use\n- Dashboard review\n- Metrics logging\n- Recommendation review\n- Premium feature discovery\n\n5.3 Offline Experience\n- Core tracking continues\n- Data stored locally\n- Sync upon reconnection\n- Graceful notification of limited functionality\n\n6. Design Guidelines\n\n6.1 Visual Style\n- Clean, medical aesthetic\n- Accessible color palette\n- Clear data visualizations\n- Premium features subtly distinguished\n\n6.2 Accessibility\n- Support for screen readers\n- Adjustable text sizes\n- Voice commands\n- High contrast mode\n\n7. Monetization Strategy\n\n7.1 Freemium Model\n- Basic Tier (Free)\n  - Core health tracking features\n  - Basic insights and recommendations\n  - 30-day history\n  - Limited healthcare provider sharing\n  - Ad-supported experience\n\n- Premium Tier ($7.99/month or $79.99/year)\n  - Advanced analytics and insights\n  - Unlimited history and data export\n  - AI health coach and personalized recommendations\n  - Priority healthcare provider connectivity\n  - Custom health metrics and tracking\n  - Ad-free experience\n\n- Family Plan ($19.99/month or $199.99/year)\n  - Premium features for up to 6 family members\n  - Family health coordination tools\n  - Family challenges and goals\n  - Caregiver monitoring features\n\n7.2 Healthcare Provider Model\n- Provider Dashboard Subscription ($199/month per provider)\n  - Patient population monitoring\n  - Custom alert configuration\n  - Integration with EHR systems\n  - Patient communication tools\n  - Outcome tracking and reporting\n\n7.3 Data Research Partnership (Opt-in)\n- Anonymized, aggregated data insights\n- Research partnership revenue sharing\n- Absolute user privacy and transparency\n- Clear user benefits for participation\n\n8. Development Timeline\n\nPhase 1 (June 2025)\n- Core tracking features\n- Basic dashboard\n- User accounts and profiles\n- Freemium foundation\n\nPhase 2 (August 2025)\n- Social features\n- Enhanced analytics\n- Premium subscription implementation\n- Initial healthcare provider features\n- Family plan beta\n\nPhase 3 (October 2025)\n- Full healthcare integration\n- Provider subscription launch\n- Advanced recommendations\n- Complete premium feature set\n\nPhase 4 (December 2025)\n- Research partnership platform\n- Advanced AI health coaching\n- International localization\n\n9. Success Metrics\n\n9.1 User Metrics\n- User acquisition: 100,000 users in first 3 months\n- Retention: 60% 30-day retention rate\n- Engagement: 5 app opens per week per user\n- Health outcomes: Improvement in user-reported health metrics\n\n9.2 Business Metrics\n- Conversion rate: 5% free to premium\n- Provider adoption: 500 healthcare providers in first 6 months\n- Annual recurring revenue: $2M by end of year 1\n\n10. Support and Operations\n\n10.1 User Support\n- In-app help center\n- Email support (24-hour response)\n- Live chat support (Premium users)\n- Community forums\n\n10.2 Updates and Maintenance\n- Bi-weekly feature updates\n- Monthly security patches\n- Quarterly major releases\n\n11. Localization\n\n- Initial launch: English (US, UK, CA, AU)\n- Phase 2: Spanish, French, German\n- Phase 3: Japanese, Chinese, Portuguese\n- Culturally appropriate health recommendations\n- Regional regulatory compliance\n\n12. Testing Strategy\n\n12.1 Internal Testing\n- Unit testing for all components\n- Integration testing for connected services\n- Performance testing for speed and battery usage\n\n12.2 External Testing\n- Closed beta with 500 users (2 weeks)\n- Open beta with 5,000 users (4 weeks)\n- Healthcare provider beta program\n- Accessibility compliance testing",
-          filename: "HealthTrack_Product_Spec_v1.1.txt",
+          fileName: "HealthTrack_Product_Spec_v1.1.txt",
           fileType: "text/plain",
           changes: [
             {
@@ -1656,7 +1686,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: "I've enhanced the image and extracted the text. Here’s the result:",
+          data: "I've enhanced the image and extracted the text. Here's the result:",
         },
       },
       {
@@ -1854,7 +1884,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: "Here’s the enhanced version of your photo!",
+          data: "Here's the enhanced version of your photo!",
         },
       },
       {
@@ -1952,7 +1982,7 @@ const result2 = findPeakTime(userData); // no log, returns cached result immedia
         ],
         content: {
           type: "text",
-          data: `Here’s a suggested 5-day itinerary for Paris based on your interests:
+          data: `Here's a suggested 5-day itinerary for Paris based on your interests:
 
 Day 1: Arrival and Leisure
 - Check into your hotel

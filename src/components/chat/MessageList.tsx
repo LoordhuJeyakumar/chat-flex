@@ -365,7 +365,7 @@ function ContentRenderer({ content, viewMode = 'standard' }: { content: Content,
           >
             <FileText size={18} className="text-blue-600 dark:text-blue-400" />
             <div>
-              <div className="font-medium dark:text-gray-200">{(content as DocumentContent).filename || 'Document'}</div>
+              <div className="font-medium dark:text-gray-200">{(content as DocumentContent).fileName || 'Document'}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">{(content as DocumentContent).fileType || 'File'}</div>
             </div>
           </a>

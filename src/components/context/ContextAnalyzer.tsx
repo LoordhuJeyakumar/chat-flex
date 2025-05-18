@@ -1,164 +1,117 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Message, ContentType, ContentSuggestion } from '@/types/core';
+
+import { useCallback, useEffect } from 'react';
+import { Message, Content } from '@/types/core';
+
+export interface ContentSuggestion {
+  type: string;
+  confidence: number;
+}
 
 interface ContextAnalyzerProps {
-  messages: Message[];
+  messages?: Message[];
   onSuggestionChange?: (suggestion: ContentSuggestion | null) => void;
-  children: React.ReactNode;
 }
 
 export default function ContextAnalyzer({ 
-  messages, 
-  onSuggestionChange,
-  children 
+  messages = [],
+  onSuggestionChange 
 }: ContextAnalyzerProps) {
-  const [currentSuggestion, setCurrentSuggestion] = useState<ContentSuggestion | null>(null);
-  const [patterns, setPatterns] = useState<Record<string, number>>({});
   
-  // Analyze messages to detect patterns and suggest content types
-  useEffect(() => {
-    if (!messages.length) return;
+  /**
+   * Analyze the conversation context to suggest the next content type
+   */
+  const analyzeContext = useCallback(() => {
+    if (messages.length === 0) return null;
     
-    // Get the last few messages for context
-    const recentMessages = messages.slice(-5);
+    // Get the last message
     const lastMessage = messages[messages.length - 1];
+    if (lastMessage.sender !== 'ai') return null;
     
-    // Reset patterns if conversation shifts
-    if (messages.length % 10 === 0) {
-      setPatterns({});
+    const content = extractTextContent(lastMessage.content);
+    
+    // Simple keyword-based suggestion
+    if (content.includes('code') || content.includes('function') || content.includes('syntax')) {
+      return { type: 'code', confidence: 0.8 };
+    } else if (content.includes('image') || content.includes('picture') || content.includes('photo')) {
+      return { type: 'image', confidence: 0.8 };
+    } else if (content.includes('audio') || content.includes('sound') || content.includes('voice')) {
+      return { type: 'audio', confidence: 0.8 };
+    } else if (content.includes('document') || content.includes('pdf') || content.includes('file')) {
+      return { type: 'document', confidence: 0.8 };
+    } else if (content.includes('data') || content.includes('spreadsheet') || content.includes('table')) {
+      return { type: 'spreadsheet', confidence: 0.8 };
+    } else if (content.includes('chart') || content.includes('graph') || content.includes('visualization')) {
+      return { type: 'chart', confidence: 0.8 };
+    } else if (content.includes('diagram') || content.includes('flow') || content.includes('sequence')) {
+      return { type: 'diagram', confidence: 0.8 };
     }
     
-    // Track content type patterns
-    const newPatterns = { ...patterns };
-    recentMessages.forEach(message => {
-      if (message.contentType) {
-        newPatterns[message.contentType] = (newPatterns[message.contentType] || 0) + 1;
+    // If multiple types of content in the conversation, suggest the most relevant next type
+    // based on conversation flow
+    const contentTypeCounts = countContentTypes(messages);
+    
+    // If there's a predominant content type, suggest it might continue
+    const maxType = Object.entries(contentTypeCounts)
+      .sort((a, b) => b[1] - a[1])[0];
+    
+    if (maxType && maxType[1] > 1 && maxType[0] !== 'text') {
+      return { type: maxType[0], confidence: 0.6 };
+    }
+    
+    // No clear suggestion
+    return null;
+  }, [messages]);
+  
+  // Run analysis whenever messages change and notify parent
+  useEffect(() => {
+    if (onSuggestionChange) {
+      const suggestion = analyzeContext();
+      onSuggestionChange(suggestion);
+    }
+  }, [messages, analyzeContext, onSuggestionChange]);
+  
+  // Helper function to extract text content from any content type
+  const extractTextContent = (content: Content | string): string => {
+    if (typeof content === 'string') return content;
+    
+    switch (content.type) {
+      case 'text':
+        return content.data;
+      case 'code':
+        return content.data;
+      case 'image':
+        return content.caption || '';
+      case 'audio':
+        return content.transcription || '';
+      case 'document':
+        return typeof content.data === 'string' ? content.data : '';
+      case 'spreadsheet':
+        return content.metadata?.summary || '';
+      case 'chart':
+        return JSON.stringify(content.data);
+      case 'diagram':
+        return content.data;
+      default:
+        return '';
+    }
+  };
+  
+  // Helper to count content types in the conversation
+  const countContentTypes = (messages: Message[]): Record<string, number> => {
+    const counts: Record<string, number> = {};
+    
+    messages.forEach(message => {
+      if (typeof message.content === 'string') {
+        counts['text'] = (counts['text'] || 0) + 1;
+      } else {
+        counts[message.content.type] = (counts[message.content.type] || 0) + 1;
       }
     });
-    setPatterns(newPatterns);
     
-    // Analyze the last message content for keywords
-    let suggestion: ContentSuggestion | null = null;
-    
-    if (lastMessage && lastMessage.role === 'assistant') {
-      const content = typeof lastMessage.content === 'string' 
-        ? lastMessage.content.toLowerCase()
-        : '';
-      
-      // Check for code-related keywords
-      if (
-        content.includes('code') || 
-        content.includes('function') || 
-        content.includes('class') ||
-        content.includes('programming') ||
-        content.includes('syntax')
-      ) {
-        suggestion = {
-          type: 'code',
-          confidence: 0.8,
-          reason: 'The conversation is about code or programming'
-        };
-      }
-      // Check for image-related keywords
-      else if (
-        content.includes('image') || 
-        content.includes('picture') || 
-        content.includes('photo') ||
-        content.includes('diagram') ||
-        content.includes('visual')
-      ) {
-        suggestion = {
-          type: 'image',
-          confidence: 0.8,
-          reason: 'The conversation is about images or visual content'
-        };
-      }
-      // Check for audio-related keywords
-      else if (
-        content.includes('audio') || 
-        content.includes('sound') || 
-        content.includes('recording') ||
-        content.includes('voice') ||
-        content.includes('listen')
-      ) {
-        suggestion = {
-          type: 'audio',
-          confidence: 0.8,
-          reason: 'The conversation is about audio content'
-        };
-      }
-      // Check for document-related keywords
-      else if (
-        content.includes('document') || 
-        content.includes('pdf') || 
-        content.includes('text') ||
-        content.includes('paper') ||
-        content.includes('read')
-      ) {
-        suggestion = {
-          type: 'document',
-          confidence: 0.8,
-          reason: 'The conversation is about documents or text content'
-        };
-      }
-      // Check for data-related keywords
-      else if (
-        content.includes('data') || 
-        content.includes('spreadsheet') || 
-        content.includes('excel') ||
-        content.includes('table') ||
-        content.includes('row') ||
-        content.includes('column')
-      ) {
-        suggestion = {
-          type: 'spreadsheet',
-          confidence: 0.8,
-          reason: 'The conversation is about data or spreadsheets'
-        };
-      }
-      // Check for chart-related keywords
-      else if (
-        content.includes('chart') || 
-        content.includes('graph') || 
-        content.includes('plot') ||
-        content.includes('visualization') ||
-        content.includes('trend')
-      ) {
-        suggestion = {
-          type: 'chart',
-          confidence: 0.8,
-          reason: 'The conversation is about charts or data visualization'
-        };
-      }
-    }
-    
-    // If no keyword match, suggest based on patterns
-    if (!suggestion && Object.keys(newPatterns).length > 0) {
-      // Find the most common content type
-      const mostCommonType = Object.entries(newPatterns)
-        .sort((a, b) => b[1] - a[1])[0];
-      
-      if (mostCommonType && mostCommonType[1] >= 2) {
-        suggestion = {
-          type: mostCommonType[0] as ContentType,
-          confidence: 0.6,
-          reason: 'Based on the conversation pattern'
-        };
-      }
-    }
-    
-    // Only update if suggestion changed
-    if (
-      suggestion?.type !== currentSuggestion?.type || 
-      suggestion?.confidence !== currentSuggestion?.confidence
-    ) {
-      setCurrentSuggestion(suggestion);
-      if (onSuggestionChange) {
-        onSuggestionChange(suggestion);
-      }
-    }
-  }, [messages, patterns, currentSuggestion, onSuggestionChange]);
+    return counts;
+  };
   
-  return <>{children}</>;
-} 
+  // This is a headless component, so it doesn't render anything visible
+  return null;
+}

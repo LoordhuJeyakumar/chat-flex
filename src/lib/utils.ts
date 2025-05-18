@@ -69,7 +69,7 @@ export function getMessagePreview(content: Content): string {
     case "chart":
       return `[Chart: ${content.chartType}]`;
     case "document":
-      return `[Document: ${content.filename}]`;
+      return `[Document: ${content.fileName || "Document"}]`;
     case "diagram":
       return `[Diagram: ${content.diagramType}]`;
     case "drawing":

@@ -16,11 +16,7 @@ export interface Annotation {
   text?: string;
 }
 
-export interface FileMetadata {
-  filename: string;
-  fileType: string;
-  pages: number;
-}
+export interface FileMetadata {  fileName: string;  fileType: string;  totalPages: number;}
 
 // Content Types
 export interface TextContent {
@@ -49,20 +45,18 @@ export interface AudioContent {
 
 export interface SpreadsheetContent {
   type: "spreadsheet";
-  data: Record<string, unknown>[];
+  data: Record<string, string | number | boolean | null | undefined>[];
   metadata: {
     columns: string[];
-    summary: string;
+    summary?: string;
   };
 }
-
-
 
 export interface ChartData {
   labels?: string[];
   datasets: {
     label: string;
-    data: unknown[];
+    data: { x: number; y: number; r: number; }[];
     backgroundColor?: string;
     borderColor?: string;
     fill?: boolean;
@@ -72,23 +66,41 @@ export interface ChartData {
 
 export interface ChartContent {
   type: "chart";
-  chartType: "bar" | "line" | "bubble";
-  data: ChartData;
+  chartType: "bar" | "line" | "pie" | "scatter" | "bubble" | "doughnut" | "radar" | "polarArea";
+  data: {
+    labels?: string[];
+    datasets: {
+      label: string;
+      data: { x: number; y: number; r: number; }[];
+      backgroundColor?: string | string[];
+      borderColor?: string | string[];
+      fill?: boolean;
+      tension?: number;
+      borderWidth?: number;
+      radius?: number;
+    }[];
+  };
   options?: Record<string, unknown>;
 }
 
 export interface DocumentContent {
   type: "document";
   data: string;
-  filename: string;
-  fileType: string;
-  pages: number;
+  fileName?: string;
+  fileType?: string;
+  totalPages?: number;
+  highlights?: Array<{
+    text: string;
+    page: number;
+    color?: string;
+  }>;
   annotations?: Annotation[];
   changes?: Array<{
     type: "addition" | "modification";
     section: string;
     content: string;
   }>;
+  pages?: number;
 }
 
 export interface DrawingContent {
@@ -102,7 +114,6 @@ export interface DrawingContent {
   }>;
   annotations?: Annotation[];
 }
-
 
 // Message-related types
 export interface ThinkingStep {
@@ -133,7 +144,6 @@ export interface Conversation {
   description: string;
   messages: Message[];
 }
-
 
 // Diagram Types
 export interface DiagramContent {

@@ -1,8 +1,20 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { Paperclip, Mic, Send, X } from 'lucide-react';
-import { ContentType, ContentSuggestion, PreviewData } from '@/types/core';
 import ContentTypeSwitcher from './ContentTypeSwitcher';
+import { ContentType } from '@/types/message';
+import { ContentSuggestion } from '../context/ContextAnalyzer';
+
+interface PreviewData {
+  url?: string;
+  name?: string;
+  language?: string;
+  content?: string;
+  type?: string;
+  size?: number;
+  data?: string | ArrayBuffer | null;
+  duration?: string;
+}
 
 interface MediaInputBarProps {
   onSend: (content: string, contentType: ContentType, metadata?: PreviewData) => void;
@@ -29,8 +41,8 @@ export default function MediaInputBar({
   
   // Apply content type suggestion when provided
   useEffect(() => {
-    if (suggestion && suggestion.confidence > 0.7) {
-      setContentType(suggestion.type);
+    if (suggestion && (suggestion?.confidence || 0) > 0.7) {
+      setContentType(suggestion?.type as ContentType);
     }
   }, [suggestion]);
   
@@ -160,8 +172,8 @@ export default function MediaInputBar({
         <ContentTypeSwitcher
           currentType={contentType}
           onTypeChange={setContentType}
-          previewData={previewData}
-          onEditPreview={setPreviewData}
+          previewData={previewData ?? undefined }
+          onEditPreview={setPreviewData as (data: PreviewData | string | null) => void}
         />
         
         {suggestion && (
@@ -169,7 +181,7 @@ export default function MediaInputBar({
             <span>Suggested: {suggestion.type}</span>
             <button 
               className="ml-1 text-blue-500 hover:text-blue-600"
-              onClick={() => setContentType(suggestion.type)}
+              onClick={() => setContentType(suggestion.type as ContentType)}
             >
               Use
             </button>
