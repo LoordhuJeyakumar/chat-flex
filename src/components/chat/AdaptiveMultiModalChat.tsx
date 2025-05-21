@@ -764,6 +764,8 @@ export default function AdaptiveMultiModalChat({
                         src={previewData.url}
                         alt="Preview"
                         className="max-h-32 rounded"
+                        width={128}
+                        height={128}
                       />
                     </div>
                   ) : (
